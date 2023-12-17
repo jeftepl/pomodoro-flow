@@ -1,0 +1,11 @@
+.button {
+  border-radius: 8px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 0;
+  outline: none;
+  cursor: pointer;
+  min-width: 150px;
+}
