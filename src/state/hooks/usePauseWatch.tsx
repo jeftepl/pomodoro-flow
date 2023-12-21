@@ -12,17 +12,17 @@ export default function usePause() {
   const selectedTask = useGetSelectedTask();
 
   return () => {
-    setWatch({ ...watch, run: false });
-
+    if(selectedTask?.completed) return
     let remainingTimeString = formatSecondsToString(watch.value);
+    const timePassedInSeconds = watch.initialValue - watch.value;
 
-    if(selectedTask?.remainingTime) {
-      const remainingTimeInSeconds = formatStringToSeconds(selectedTask?.remainingTime);
-      const timePassedInSeconds = remainingTimeInSeconds - watch.value;
+    if(selectedTask) {
+      const remainingTimeInSeconds = formatStringToSeconds(selectedTask.remainingTime);
       const remainingValueInSeconds = remainingTimeInSeconds - timePassedInSeconds;
       remainingTimeString = formatSecondsToString(remainingValueInSeconds);
     }
 
+    setWatch({ ...watch, initialValue: watch.initialValue - timePassedInSeconds,  run: false });
     setTasks(tasks.map(task => {
       if(task.id === selectedTask?.id) {
         return {

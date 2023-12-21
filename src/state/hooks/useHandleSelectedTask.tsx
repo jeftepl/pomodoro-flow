@@ -4,11 +4,13 @@ import { IWatch } from "@interfaces/IWatch";
 import { tasksState, watchState } from "@state/atom";
 import { useSetRecoilState } from "recoil";
 import usePauseWatch from "./usePauseWatch";
+import useFlow from "./useFlow";
 
 export default function useHandleSelectedTask() {
   const setTasks = useSetRecoilState<ITask[]>(tasksState);
   const setWatch = useSetRecoilState<IWatch>(watchState);
   const pauseWatch = usePauseWatch();
+  const flow = useFlow();
 
   return (task: ITask) => {
     pauseWatch();
@@ -26,9 +28,11 @@ export default function useHandleSelectedTask() {
         };
       })
     );
+    const watchValue = formatStringToSeconds(task.completed && !task.selected ? "0" : flow.pomodoro);
     setWatch(oldWatch => ({
       ...oldWatch,
-      value: formatStringToSeconds(!task.selected ? task.remainingTime : "0"),
+      initialValue: watchValue,
+      value: watchValue,
     }));
   };
 }

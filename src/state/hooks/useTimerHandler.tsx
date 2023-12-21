@@ -4,6 +4,8 @@ import { useRecoilState } from "recoil";
 import useCompleteTask from "./useCompleteTask";
 import { IWatch } from "@interfaces/IWatch";
 import { useEffect, useCallback, useRef } from "react";
+import { formatStringToSeconds } from "@common/utils/timeFormatter";
+import usePause from "./usePauseWatch";
 
 export default function useTimerHandler() {
   const [watch, setWatch] = useRecoilState<IWatch>(watchState);
@@ -12,6 +14,7 @@ export default function useTimerHandler() {
 
   const selectedTask = useGetSelectedTask();
   const completeTask = useCompleteTask();
+  const pause = usePause();
 
   const stopTimer = useCallback(() => {
     clearInterval(timerIdRef.current);
@@ -24,23 +27,27 @@ export default function useTimerHandler() {
       return;
     }
     isTimerRunningRef.current = true;
-    let remainingTime = watch.value;
+    let timeWatch = watch.value;
     timerIdRef.current = setInterval(() => {
       try {
-        if (remainingTime === 0) {
+        const timePassedInSeconds = watch.initialValue - watch.value;
+        const remainingTimeInSeconds = formatStringToSeconds(selectedTask.remainingTime);
+        if((remainingTimeInSeconds - timePassedInSeconds) === 0) {
           completeTask();
-          setWatch({ value: 0, run: false });
+          setWatch(oldWatch => ({...oldWatch, value: 0, run: false }));
           stopTimer();
+        } else if (timeWatch === 0) {
+          pause();
         } else {
-          setWatch(oldWatch => ({ ...oldWatch, value: remainingTime - 1 }));
-          remainingTime -= 1;
+          setWatch(oldWatch => ({ ...oldWatch, value: timeWatch - 1 }));
+          timeWatch -= 1;
         }
       } catch (error) {
         console.error("Timer Error:", error);
         stopTimer();
       }
     }, 1000);
-  }, [completeTask, setWatch, selectedTask, watch, stopTimer]);
+  }, [completeTask, setWatch, selectedTask, watch, stopTimer, pause]);
 
   useEffect(() => {
     if (watch.run && selectedTask && !isTimerRunningRef.current) {
