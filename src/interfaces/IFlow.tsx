@@ -1,5 +1,6 @@
+import { IFlowItem } from "./IFlowItem";
 export interface IFlow {
-  pomodoro: string,
-  break: string,
-  longBreak: string
+  pomodoro: IFlowItem,
+  break: IFlowItem,
+  longBreak: IFlowItem
 }

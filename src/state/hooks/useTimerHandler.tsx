@@ -5,7 +5,7 @@ import useCompleteTask from "./useCompleteTask";
 import { IWatch } from "@interfaces/IWatch";
 import { useEffect, useCallback, useRef } from "react";
 import { formatStringToSeconds } from "@common/utils/timeFormatter";
-import usePause from "./usePauseWatch";
+import useFlowHandler from "./useFlowHandler";
 
 export default function useTimerHandler() {
   const [watch, setWatch] = useRecoilState<IWatch>(watchState);
@@ -14,7 +14,7 @@ export default function useTimerHandler() {
 
   const selectedTask = useGetSelectedTask();
   const completeTask = useCompleteTask();
-  const pause = usePause();
+  const flowHandler = useFlowHandler();
 
   const stopTimer = useCallback(() => {
     clearInterval(timerIdRef.current);
@@ -37,7 +37,7 @@ export default function useTimerHandler() {
           setWatch(oldWatch => ({...oldWatch, value: 0, run: false }));
           stopTimer();
         } else if (timeWatch === 0) {
-          pause();
+          flowHandler();
         } else {
           setWatch(oldWatch => ({ ...oldWatch, value: timeWatch - 1 }));
           timeWatch -= 1;
@@ -47,7 +47,7 @@ export default function useTimerHandler() {
         stopTimer();
       }
     }, 1000);
-  }, [completeTask, setWatch, selectedTask, watch, stopTimer, pause]);
+  }, [completeTask, setWatch, selectedTask, watch, stopTimer, flowHandler]);
 
   useEffect(() => {
     if (watch.run && selectedTask && !isTimerRunningRef.current) {

@@ -28,7 +28,7 @@ export default function useHandleSelectedTask() {
         };
       })
     );
-    const watchValue = formatStringToSeconds(task.completed && !task.selected ? "0" : flow.pomodoro);
+    const watchValue = formatStringToSeconds(task.completed && !task.selected ? "0" : flow.pomodoro.time);
     setWatch(oldWatch => ({
       ...oldWatch,
       initialValue: watchValue,
