@@ -65,6 +65,6 @@ export default function useTimerHandler() {
     if (!selectedTask || selectedTask.completed) {
       return;
     }
-    setWatch(oldWatch => ({ ...oldWatch, run: true }));
+    flowHandler();
   };
 }

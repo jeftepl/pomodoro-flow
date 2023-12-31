@@ -2,17 +2,24 @@ import { formatStringToSeconds } from "@common/utils/timeFormatter";
 import { IFlow } from "@interfaces/IFlow";
 import { IWatch } from "@interfaces/IWatch";
 import { flowState, watchState } from "@state/atom";
-import { useRecoilState, useSetRecoilState } from "recoil";
+import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
 
 export default function useFlowHandler() {
-  let newNumberOfTimes = 0;
+  type FlowKeys = keyof IFlow;
 
   const [flow, setFlow] = useRecoilState<IFlow>(flowState);
   const setWatch = useSetRecoilState<IWatch>(watchState);
+  const resetFlow = useResetRecoilState(flowState);
+
+  const POMODORO = "pomodoro";
+  const BREAK = "break";
+  const LONG_BREAK = "longBreak";
+
+  let currentNumberOfTimes = 0;
 
   function updateWatch(time: string) {
     const newWatchValue = formatStringToSeconds(time);
-    setWatch(oldWatch => ({
+    setWatch((oldWatch) => ({
       ...oldWatch,
       initialValue: newWatchValue,
       value: newWatchValue,
@@ -20,77 +27,35 @@ export default function useFlowHandler() {
     }));
   }
 
-  function pomodoroHandler() {
-    setFlow(oldFlow => ({
-      ...oldFlow,
-      pomodoro: {
-        ...oldFlow.pomodoro,
-        active: true,
-      },
-    }));
-    updateWatch(flow.pomodoro.time);
-  }
-
-  function pomodoroToBreakHandler() {
+  function toggleActivityAndUpdateCount(state: FlowKeys, activeState: boolean, count: number) {
     setFlow(oldFlow => {
-      newNumberOfTimes = oldFlow.pomodoro.numberOfTimes + 1;
+      currentNumberOfTimes = oldFlow[state].numberOfTimes + count;
       return {
         ...oldFlow,
-        pomodoro: {
-          ...oldFlow.pomodoro,
-          active: false,
-          numberOfTimes: newNumberOfTimes,
-        },
-        break: {
-          ...oldFlow.break,
-          active: true,
+        [state]: {
+          ...oldFlow[state],
+          numberOfTimes: currentNumberOfTimes,
+          active: activeState,
         },
       };
     });
-    updateWatch(flow.break.time);
-  }
-
-  function breakToLongBreakOrPomodoroHandler() {
-    setFlow(oldFlow => {
-      newNumberOfTimes = oldFlow.break.numberOfTimes + 1;
-      return {
-        ...oldFlow,
-        break: {
-          ...oldFlow.break,
-          numberOfTimes: newNumberOfTimes,
-          active: false,
-        },
-      };
-    });
-    if (newNumberOfTimes === 4) {
-      setFlow(oldFlow => ({
-        ...oldFlow,
-        pomodoro: {
-          ...oldFlow.pomodoro,
-          numberOfTimes: 0,
-        },
-        break: {
-          ...oldFlow.break,
-          numberOfTimes: 0,
-        },
-        longBreak: {
-          ...oldFlow.longBreak,
-          active: true,
-        },
-      }));
-      updateWatch(flow.longBreak.time);
-    } else {
-      pomodoroHandler();
-    }
+    updateWatch(flow[state].time);
   }
 
   return () => {
     if (flow.pomodoro.active) {
-      pomodoroToBreakHandler();
+      toggleActivityAndUpdateCount(POMODORO, false, 1);
+      toggleActivityAndUpdateCount(BREAK, true, 0);
     } else if (flow.break.active) {
-      breakToLongBreakOrPomodoroHandler();
-    } else if (flow.longBreak.active) {
-      pomodoroHandler();
+      toggleActivityAndUpdateCount(BREAK, false, 1);
+      if (currentNumberOfTimes === 4) {
+        resetFlow();
+        toggleActivityAndUpdateCount(LONG_BREAK, true, 0);
+      } else {
+        toggleActivityAndUpdateCount(POMODORO, true, 0);
+      }
+    } else {
+      toggleActivityAndUpdateCount(POMODORO, true, 0);
     }
   };
 }
