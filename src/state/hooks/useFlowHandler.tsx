@@ -1,15 +1,19 @@
-import { formatStringToSeconds } from "@common/utils/timeFormatter";
+import { formatSecondsToString, formatStringToSeconds } from "@common/utils/timeFormatter";
 import { IFlow } from "@interfaces/IFlow";
 import { IWatch } from "@interfaces/IWatch";
-import { flowState, watchState } from "@state/atom";
+import { ITask } from "@interfaces/ITask";
+import { flowState, tasksState, watchState } from "@state/atom";
 import { useRecoilState, useResetRecoilState, useSetRecoilState } from "recoil";
+import useGetSelectedTask from "./useGetSelectedTask";
 
 export default function useFlowHandler() {
   type FlowKeys = keyof IFlow;
 
   const [flow, setFlow] = useRecoilState<IFlow>(flowState);
   const setWatch = useSetRecoilState<IWatch>(watchState);
+  const setTasks = useSetRecoilState<ITask[]>(tasksState);
   const resetFlow = useResetRecoilState(flowState);
+  const selectedTask = useGetSelectedTask();
 
   const POMODORO = "pomodoro";
   const BREAK = "break";
@@ -19,12 +23,30 @@ export default function useFlowHandler() {
 
   function updateWatch(time: string) {
     const newWatchValue = formatStringToSeconds(time);
-    setWatch((oldWatch) => ({
+    setWatch(oldWatch => ({
       ...oldWatch,
       initialValue: newWatchValue,
       value: newWatchValue,
       run: true,
     }));
+  }
+
+  function updateTaskRemainingTime(flowTime: string) {
+    setTasks(oldTasks => oldTasks.map(task => {
+      if(task.id === selectedTask?.id) {
+        const flowTimeInSeconds = formatStringToSeconds(flowTime);
+        const selectedTaskRemainingTimeInSeconds = formatStringToSeconds(selectedTask.remainingTime);
+        const totalInSeconds = selectedTaskRemainingTimeInSeconds - flowTimeInSeconds;
+        const totalString = formatSecondsToString(totalInSeconds);
+        return {
+          ...task,
+          remainingTime: totalString
+        }
+      }
+      return {
+        ...task
+      }
+    }))
   }
 
   function toggleActivityAndUpdateCount(state: FlowKeys, activeState: boolean, count: number) {
@@ -40,6 +62,9 @@ export default function useFlowHandler() {
       };
     });
     updateWatch(flow[state].time);
+    if(count > 0) {
+      updateTaskRemainingTime(flow[state].time);
+    }
   }
 
   return () => {
