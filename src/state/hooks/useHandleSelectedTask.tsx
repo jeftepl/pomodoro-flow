@@ -3,17 +3,17 @@ import { ITask } from "@interfaces/ITask";
 import { IWatch } from "@interfaces/IWatch";
 import { tasksState, watchState } from "@state/atom";
 import { useSetRecoilState } from "recoil";
-import usePauseWatch from "./usePauseWatch";
+import useStopWatch from "./useStopWatch";
 import useFlow from "./useFlow";
 
 export default function useHandleSelectedTask() {
   const setTasks = useSetRecoilState<ITask[]>(tasksState);
   const setWatch = useSetRecoilState<IWatch>(watchState);
-  const pauseWatch = usePauseWatch();
+  const stopWatch = useStopWatch();
   const flow = useFlow();
 
   return (task: ITask) => {
-    pauseWatch();
+    stopWatch();
     setTasks(oldTasks =>
       oldTasks.map(oldTask => {
         if (oldTask.id === task.id) {

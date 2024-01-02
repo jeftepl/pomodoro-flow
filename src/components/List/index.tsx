@@ -10,7 +10,7 @@ export default function List() {
     <aside className={styles.list}>
       <h2 className={styles.list__title}>Tasks</h2>
       <h3 className={styles.list__subtitle}>
-        Select a task and start the timer
+        Select a task to be completed or just start the timer to focus
       </h3>
       <Form />
       <ul>

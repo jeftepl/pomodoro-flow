@@ -23,20 +23,23 @@ export default function useTimerHandler() {
   }, []);
 
   const startTimer = useCallback(() => {
-    if (!selectedTask || selectedTask.completed || isTimerRunningRef.current) {
+    if (selectedTask?.completed || isTimerRunningRef.current) {
       return;
     }
     isTimerRunningRef.current = true;
     let timeWatch = watch.value;
     timerIdRef.current = setInterval(() => {
       try {
-        const timePassedInSeconds = watch.initialValue - watch.value;
-        const remainingTimeInSeconds = formatStringToSeconds(selectedTask.remainingTime);
-        if((remainingTimeInSeconds - timePassedInSeconds) === 0) {
-          completeTask();
-          setWatch(oldWatch => ({...oldWatch, value: 0, run: false }));
-          stopTimer();
-        } else if (timeWatch === 0) {
+        if(selectedTask) {
+          const timePassedInSeconds = watch.initialValue - watch.value;
+          const remainingTimeInSeconds = formatStringToSeconds(selectedTask.remainingTime);
+          if ((remainingTimeInSeconds - timePassedInSeconds) === 0) {
+            completeTask();
+            setWatch(oldWatch => ({...oldWatch, value: 0, run: false }));
+            stopTimer();
+          }
+        }
+        if (timeWatch === 0) {
           flowHandler();
         } else {
           setWatch(oldWatch => ({ ...oldWatch, value: timeWatch - 1 }));
@@ -50,7 +53,7 @@ export default function useTimerHandler() {
   }, [completeTask, setWatch, selectedTask, watch, stopTimer, flowHandler]);
 
   useEffect(() => {
-    if (watch.run && selectedTask && !isTimerRunningRef.current) {
+    if (watch.run && !isTimerRunningRef.current) {
       startTimer();
     } else if (!watch.run && isTimerRunningRef.current) {
       stopTimer();
@@ -62,7 +65,7 @@ export default function useTimerHandler() {
   }, [watch, selectedTask, startTimer, stopTimer]);
 
   return () => {
-    if (!selectedTask || selectedTask.completed) {
+    if (selectedTask?.completed) {
       return;
     }
     flowHandler();

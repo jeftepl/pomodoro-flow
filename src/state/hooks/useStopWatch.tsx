@@ -5,7 +5,7 @@ import { tasksState, watchState } from "@state/atom";
 import { formatSecondsToString, formatStringToSeconds } from "@common/utils/timeFormatter";
 import useGetSelectedTask from "./useGetSelectedTask";
 
-export default function usePause() {
+export default function useStopWatch() {
   const [watch, setWatch] = useRecoilState<IWatch>(watchState);
   const [tasks, setTasks] = useRecoilState<ITask[]>(tasksState);
 
@@ -13,6 +13,7 @@ export default function usePause() {
 
   return () => {
     if(selectedTask?.completed) return
+
     let remainingTimeString = formatSecondsToString(watch.value);
     const timePassedInSeconds = watch.initialValue - watch.value;
 
