@@ -39,7 +39,7 @@ export default function Form() {
           name="time"
           id="time"
           required
-          min="00:00:00"
+          min="00:00:01"
         />
         <Button type="submit">Add</Button>
       </div>

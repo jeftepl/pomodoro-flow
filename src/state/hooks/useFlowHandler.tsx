@@ -65,8 +65,6 @@ export default function useFlowHandler() {
     if(count > 0) {
       updateTaskRemainingTime(flow[state].time);
     }
-    console.log("<--------------------------------->");
-    console.log(state, flow[state].numberOfTimes);
   }
 
   return () => {

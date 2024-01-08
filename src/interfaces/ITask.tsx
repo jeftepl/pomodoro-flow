@@ -4,5 +4,6 @@ export interface ITask {
   time: string,
   selected: boolean,
   completed: boolean,
-  remainingTime: string
+  remainingTime: string,
+  listId: string,
 }

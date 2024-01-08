@@ -1,0 +1,16 @@
+.lists {
+  padding: 20px;
+  border: 1px solid #ffffff;
+  border-radius: 5px;
+}
+
+.lists__title {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.lists__form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}

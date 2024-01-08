@@ -1,4 +1,4 @@
-.item {
+.tasksItem {
   font-size: 22px;
   line-height: 28px;
   padding: 10px;
@@ -8,6 +8,6 @@
   margin: 10px 0;
 }
 
-.item--selected {
+.tasksItem--selected {
   background-color: gray;
 }

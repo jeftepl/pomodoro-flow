@@ -12,7 +12,8 @@ export default function useAddTask() {
       id: uuid(),
       selected: false,
       completed: false,
-      remainingTime: data.time
+      remainingTime: data.time,
+      listId: ''
     };
     setTasks(oldTasks => [...oldTasks, newTask]);
   };

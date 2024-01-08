@@ -1,9 +1,9 @@
 import "./App.css";
 import { RecoilRoot } from "recoil";
-import List from "@components/List";
 import Container from "@components/Container";
 import Timer from "@components/Timer";
 import DebugObserver from "@components/DebugObserver";
+import Widgets from "@components/Widgets";
 
 function App() {
   return (
@@ -11,7 +11,7 @@ function App() {
       <DebugObserver />
       <Container>
         <Timer />
-        <List />
+        <Widgets />
       </Container>
     </RecoilRoot>
   );
