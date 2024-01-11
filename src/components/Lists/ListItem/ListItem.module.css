@@ -1,0 +1,13 @@
+.listItem {
+  font-size: 22px;
+  line-height: 28px;
+  padding: 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: rgb(49, 49, 49);
+  margin: 10px 0;
+}
+
+.listItem--selected {
+  background-color: gray;
+}

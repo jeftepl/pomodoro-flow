@@ -9,8 +9,8 @@ export default function useAddList() {
     const newList = {
       id: uuid(),
       name: data,
-      selected: true,
+      selected: false,
     };
-    setList((oldList) => [...oldList, newList]);
+    setList(oldList => [...oldList, newList]);
   };
 }
