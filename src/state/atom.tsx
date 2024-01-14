@@ -34,3 +34,8 @@ export const flowState = atom<IFlow>({
   key: "flowState",
   default: initialFlow,
 });
+
+export const searchState = atom<string>({
+  key: "searchState",
+  default: ""
+});

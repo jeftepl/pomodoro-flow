@@ -13,7 +13,7 @@ export default function ListItem({ list }: ListItemProps) {
       className={`${styles.listItem} ${
         list.selected ? styles["listItem--selected"] : ""
       }`}
-      onClick={() => handleSelectedList(list)}
+      onClick={() => handleSelectedList(list.id)}
     >
       {list.name}
     </li>
