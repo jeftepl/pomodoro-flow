@@ -1,4 +1,9 @@
 .tasksItem {
+  display: flex;
+  gap: 10px;
+}
+
+.tasksItem__text {
   font-size: 22px;
   line-height: 28px;
   padding: 10px;
@@ -8,6 +13,11 @@
   margin: 10px 0;
 }
 
-.tasksItem--selected {
+.tasksItem__text--selected {
   background-color: gray;
+}
+
+.tasksItem__options {
+  display: flex;
+  gap: 10px;
 }

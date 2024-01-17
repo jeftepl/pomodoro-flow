@@ -1,13 +1,25 @@
 .listItem {
+  margin: 10px 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.listItem__text {
   font-size: 22px;
   line-height: 28px;
   padding: 10px;
   border-radius: 8px;
   cursor: pointer;
   background-color: rgb(49, 49, 49);
-  margin: 10px 0;
+  width: 80%;
 }
 
-.listItem--selected {
+.listItem__text--selected {
   background-color: gray;
+}
+
+.listItem__options {
+  display: flex;
+  gap: 10px;
 }

@@ -3,7 +3,7 @@ import styles from "./Lists.module.css";
 import { useState } from "react";
 import useAddList from "@state/hooks/useAddList";
 import useLists from "@state/hooks/useLists";
-import ListItem from "./ListItem/ListItem";
+import ListItem from "./ListItem";
 
 export default function Lists() {
   const [newList, setNewList] = useState("");
@@ -26,6 +26,7 @@ export default function Lists() {
           id="list"
           value={newList}
           onChange={(event) => setNewList(event.target.value)}
+          required
           placeholder="Type a list"
         />
         <Button type="submit">Add</Button>
