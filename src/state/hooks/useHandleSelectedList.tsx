@@ -13,7 +13,6 @@ export default function useHandleSelectedList() {
     setLists((oldLists) =>
       oldLists.map((oldList) => {
         if (oldList.id === currentListId) {
-          console.log("if handle selected list");
           return {
             ...oldList,
             selected: !oldList.selected,

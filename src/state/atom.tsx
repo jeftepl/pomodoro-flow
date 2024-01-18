@@ -39,3 +39,8 @@ export const searchState = atom<string>({
   key: "searchState",
   default: ""
 });
+
+export const editState = atom<string | null>({
+  key: "editState",
+  default: null
+});
