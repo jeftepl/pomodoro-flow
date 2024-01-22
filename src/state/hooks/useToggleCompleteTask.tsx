@@ -1,20 +1,24 @@
 import { ITask } from "@interfaces/ITask";
 import { tasksState } from "@state/atom";
 import { useSetRecoilState } from "recoil";
-import useGetSelectedTask from "./useGetSelectedTask";
 
-export default function useCompleteTask() {
+export default function useToggleCompleteTask() {
   const setTasks = useSetRecoilState<ITask[]>(tasksState);
-  const selectedTask = useGetSelectedTask();
 
-  return () => {
+  return (taskId: string) => {
     setTasks((oldTasks) =>
       oldTasks.map(task => {
-        if (selectedTask && task.id === selectedTask.id) {
+        if (task.id === taskId) {
+          let newTime = "";
+          if(task.completed) {
+            newTime = task.time;
+          } else {
+            newTime = "00:00:00";
+          }
           return {
             ...task,
-            completed: true,
-            remainingTime: "00:00:00",
+            completed: !task.completed,
+            remainingTime: newTime
           };
         }
         return task;

@@ -36,7 +36,10 @@ export default function useFlowHandler() {
       if(task.id === selectedTask?.id) {
         const flowTimeInSeconds = formatStringToSeconds(flowTime);
         const selectedTaskRemainingTimeInSeconds = formatStringToSeconds(selectedTask.remainingTime);
-        const totalInSeconds = selectedTaskRemainingTimeInSeconds - flowTimeInSeconds;
+        let totalInSeconds = selectedTaskRemainingTimeInSeconds - flowTimeInSeconds;
+        if(totalInSeconds < 0) {
+          totalInSeconds = 0;
+        }
         const totalString = formatSecondsToString(totalInSeconds);
         return {
           ...task,

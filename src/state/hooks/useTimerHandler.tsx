@@ -1,7 +1,7 @@
 import { watchState } from "@state/atom";
 import useGetSelectedTask from "./useGetSelectedTask";
 import { useRecoilState } from "recoil";
-import useCompleteTask from "./useCompleteTask";
+import useToggleCompleteTask from "./useToggleCompleteTask";
 import { IWatch } from "@interfaces/IWatch";
 import { useEffect, useCallback, useRef } from "react";
 import { formatStringToSeconds } from "@common/utils/timeFormatter";
@@ -13,7 +13,7 @@ export default function useTimerHandler() {
   const timerIdRef = useRef<number | undefined>(undefined);
 
   const selectedTask = useGetSelectedTask();
-  const completeTask = useCompleteTask();
+  const toggleCompleteTask = useToggleCompleteTask();
   const flowHandler = useFlowHandler();
 
   const stopTimer = useCallback(() => {
@@ -34,9 +34,10 @@ export default function useTimerHandler() {
           const timePassedInSeconds = watch.initialValue - watch.value;
           const remainingTimeInSeconds = formatStringToSeconds(selectedTask.remainingTime);
           if ((remainingTimeInSeconds - timePassedInSeconds) === 0) {
-            completeTask();
+            toggleCompleteTask(selectedTask.id);
             setWatch(oldWatch => ({...oldWatch, value: 0, run: false }));
             stopTimer();
+            return;
           }
         }
         if (timeWatch === 0) {
@@ -50,7 +51,7 @@ export default function useTimerHandler() {
         stopTimer();
       }
     }, 1000);
-  }, [completeTask, setWatch, selectedTask, watch, stopTimer, flowHandler]);
+  }, [toggleCompleteTask, setWatch, selectedTask, watch, stopTimer, flowHandler]);
 
   useEffect(() => {
     if (watch.run && !isTimerRunningRef.current) {

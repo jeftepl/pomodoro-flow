@@ -7,6 +7,7 @@ import { useState } from "react";
 import useEditTask from "@state/hooks/useEditTask";
 import { useRecoilState } from "recoil";
 import { editState } from "@state/atom";
+import useToggleCompleteTask from "@state/hooks/useToggleCompleteTask";
 
 interface ItemProps {
   task: ITask;
@@ -16,13 +17,15 @@ export default function TasksItem({ task }: ItemProps) {
   const handleSelectedTask = useHandleSelectedTask();
   const deleteTask = useDeleteTask();
   const editTask = useEditTask();
+  const toggleCompleteTask = useToggleCompleteTask();
 
   const [edit, setEdit] = useRecoilState<string | null>(editState);
 
   const [taskName, setTaskName] = useState(task.name);
+  const [taskTime, setTaskTime] = useState(task.time);
 
   function handleEditTask() {
-    editTask(task.id, taskName);
+    editTask(task.id, taskName, taskTime);
     setEdit(null);
   }
 
@@ -30,6 +33,7 @@ export default function TasksItem({ task }: ItemProps) {
     <li className={styles.taskItem}>
       {(!edit || edit !== task.id) && (
         <div className={styles.taskItem__read}>
+          <input type="checkbox" checked={task.completed} onChange={() => toggleCompleteTask(task.id)} />
           <p
             className={`${styles.tasksItem__text} ${
               task.selected ? styles["tasksItem__text--selected"] : ""
@@ -38,9 +42,8 @@ export default function TasksItem({ task }: ItemProps) {
           >
             {task.name + " - "}
             <span className={styles["tasksItem--time"]}>
-              {task.time + " - " + task.remainingTime}
+              {task.time}
             </span>
-            <span>{task.completed ? " ✓" : ""}</span>
           </p>
           <div className={styles.tasksItem__options}>
             <Button onClick={() => setEdit(task.id)}>Edit</Button>
@@ -53,7 +56,17 @@ export default function TasksItem({ task }: ItemProps) {
           <input
             type="text"
             value={taskName}
-            onChange={(element) => setTaskName(element.target.value)}
+            onChange={(event) => setTaskName(event.target.value)}
+          />
+          <input
+            type="time"
+            value={taskTime}
+            onChange={event => setTaskTime(event.target.value)}
+            step="1"
+            name="time"
+            id="time"
+            required
+            min="00:00:01"
           />
           <Button onClick={handleEditTask}>Ok</Button>
         </div>
