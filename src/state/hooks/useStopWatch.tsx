@@ -21,17 +21,18 @@ export default function useStopWatch() {
       const remainingTimeInSeconds = formatStringToSeconds(selectedTask.remainingTime);
       const remainingValueInSeconds = remainingTimeInSeconds - timePassedInSeconds;
       remainingTimeString = formatSecondsToString(remainingValueInSeconds);
+
+      setTasks(tasks.map(task => {
+        if(task.id === selectedTask.id) {
+          return {
+            ...task,
+            remainingTime: remainingTimeString
+          }
+        }
+        return task
+      }));
     }
 
     setWatch({ ...watch, initialValue: watch.initialValue - timePassedInSeconds,  run: false });
-    setTasks(tasks.map(task => {
-      if(task.id === selectedTask?.id) {
-        return {
-          ...task,
-          remainingTime: remainingTimeString
-        }
-      }
-      return task
-    }));
   };
 }

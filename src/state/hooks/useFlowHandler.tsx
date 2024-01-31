@@ -16,7 +16,7 @@ export default function useFlowHandler() {
   const selectedTask = useGetSelectedTask();
 
   const POMODORO = "pomodoro";
-  const BREAK = "break";
+  const SHORT_BREAK = "shortBreak";
   const LONG_BREAK = "longBreak";
 
   let currentNumberOfTimes = 0;
@@ -73,9 +73,9 @@ export default function useFlowHandler() {
   return () => {
     if (flow.pomodoro.active && watch.value === 0) {
       toggleActivityAndUpdateCount(POMODORO, false, 1);
-      toggleActivityAndUpdateCount(BREAK, true, 0);
-    } else if (flow.break.active && watch.value === 0) {
-      toggleActivityAndUpdateCount(BREAK, false, 1);
+      toggleActivityAndUpdateCount(SHORT_BREAK, true, 0);
+    } else if (flow.shortBreak.active && watch.value === 0) {
+      toggleActivityAndUpdateCount(SHORT_BREAK, false, 1);
       if (currentNumberOfTimes === 4) {
         resetFlow();
         toggleActivityAndUpdateCount(LONG_BREAK, true, 0);

@@ -1,11 +1,12 @@
 import styles from "./Watch.module.css";
 import { formatSecondsToString } from "@common/utils/timeFormatter";
-import useWatch from "@state/hooks/useWatch";
+interface IWatchProps {
+  timeInSeconds: number
+}
 
-export default function Watch() {
-  const watch = useWatch();
-  const time = formatSecondsToString(watch.value);
-  const hoursAreZero = watch.value < 3600;
+export default function Watch({ timeInSeconds }: IWatchProps) {
+  const time = formatSecondsToString(timeInSeconds);
+  const hoursAreZero = timeInSeconds < 3600;
 
   return (
     <div className={styles.watch}>

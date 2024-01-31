@@ -2,7 +2,7 @@ import { listsState, searchState, tasksState } from "@state/atom";
 import { selector } from "recoil";
 
 export const filteredLists = selector({
-  key: "listsFiltered",
+  key: "filteredLists",
   get: ({ get }) => {
     const search = get(searchState);
     const lists = get(listsState);

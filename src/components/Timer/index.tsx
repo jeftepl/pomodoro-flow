@@ -5,8 +5,13 @@ import useTimerHandler from "@state/hooks/useTimerHandler";
 import useStopWatch from "@state/hooks/useStopWatch";
 import useWatch from "@state/hooks/useWatch";
 import useGetSelectedTask from "@state/hooks/useGetSelectedTask";
+import FlowModal from "@components/FlowModal";
+import { useRecoilState } from "recoil";
+import { editState } from "@state/atom";
 
 export default function Timer() {
+  const [edit, setEdit] = useRecoilState<string | null>(editState);
+
   const timerHandler = useTimerHandler();
   const stopWatch = useStopWatch();
   const watch = useWatch();
@@ -14,7 +19,9 @@ export default function Timer() {
 
   return (
     <div className={styles.timer}>
-      <Watch />
+      <Button onClick={() => setEdit("flowModal")}>Flow</Button>
+      {edit === "flowModal" ? <FlowModal /> : null}
+      <Watch timeInSeconds={watch.value} />
       <Button
         onClick={
           watch.run && !selectedTask?.completed

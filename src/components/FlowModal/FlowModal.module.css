@@ -1,0 +1,26 @@
+.flowModal {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 40px;
+  top: 180px;
+  z-index: 99;
+  background-color: gray;
+  border-radius: 16px;
+  font-size: 16px;
+  padding: 20px;
+}
+
+.flowModal__container {
+  display: flex;
+  gap: 10px;
+}
+
+.flowModal__content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}

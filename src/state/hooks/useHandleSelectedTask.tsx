@@ -20,7 +20,9 @@ export default function useHandleSelectedTask() {
   const flow = useFlow();
 
   return (task: ITask) => {
-    if(search) resetSearch();
+    if(search) {
+      resetSearch();
+    }
 
     stopWatch();
     setTasks(oldTasks =>

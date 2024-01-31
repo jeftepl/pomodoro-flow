@@ -7,7 +7,7 @@ import { atom } from "recoil";
 
 const initialFlow = {
   pomodoro: { time: "00:00:01", active: false, numberOfTimes: 0 },
-  break: { time: "00:00:02", active: false, numberOfTimes: 0 },
+  shortBreak: { time: "00:00:02", active: false, numberOfTimes: 0 },
   longBreak: { time: "00:00:03", active: false, numberOfTimes: 0 },
 };
 
