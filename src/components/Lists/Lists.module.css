@@ -8,9 +8,3 @@
   font-size: 24px;
   margin-bottom: 10px;
 }
-
-.lists__form {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./Form.module.css";
+import styles from "./TasksForm.module.css";
 import Button from "@components/Button";
 import { formatTwoDigits } from "@common/utils/timeFormatter";
 import { useSetRecoilState } from "recoil";
@@ -8,29 +8,29 @@ import useAddTask from "@state/hooks/useAddTask";
 import useEditTask from "@state/hooks/useEditTask";
 import { ITask } from "@interfaces/ITask";
 
-interface FormProps {
+interface TasksFormProps {
   textAction: string,
-  taskEdit?: ITask
+  task?: ITask
 }
 
-export default function TaskForm({ textAction, taskEdit }: FormProps) {
+export default function TasksForm({ textAction, task }: TasksFormProps) {
   let initialHours = "0";
   let initialMinutes = "0";
   let initialSeconds = "0";
   let initialTask = "";
 
-  if(taskEdit) {
-    const InitialTimeString = taskEdit.time;
+  if(task) {
+    const InitialTimeString = task.time;
     initialHours = InitialTimeString[0] + InitialTimeString[1];
     initialMinutes = InitialTimeString[3] + InitialTimeString[4];
     initialSeconds = InitialTimeString[6] + InitialTimeString[7];
-    initialTask = taskEdit.name;
+    initialTask = task.name;
   }
 
   const [hours, setHours] = useState(initialHours);
   const [minutes, setMinutes] = useState(initialMinutes);
   const [seconds, setSeconds] = useState(initialSeconds);
-  const [task, setTask] = useState(initialTask);
+  const [newTaskName, setNewTaskName] = useState(initialTask);
 
   const setEdit = useSetRecoilState<string | null>(editState);
 
@@ -44,20 +44,19 @@ export default function TaskForm({ textAction, taskEdit }: FormProps) {
     const formatedMinutes = formatTwoDigits(Number(minutes));
     const formatedSeconds = formatTwoDigits(Number(seconds));
 
-    const time = `${formatedHours}:${formatedMinutes}:${formatedSeconds}`;
+    const newTime = `${formatedHours}:${formatedMinutes}:${formatedSeconds}`;
 
-    if(taskEdit) {
-      editTask(taskEdit.id, task, time);
+    if(task) {
+      editTask(task.id, newTaskName, newTime);
+      setEdit(null);
     } else {
-      addTask({ name: task, time: time});
+      addTask({ name: newTaskName, time: newTime});
     }
 
-    setTask(initialTask);
+    setNewTaskName(initialTask);
     setHours(initialHours);
     setMinutes(initialMinutes);
     setSeconds(initialSeconds);
-
-    setEdit(null);
   }
 
   return (
@@ -66,8 +65,8 @@ export default function TaskForm({ textAction, taskEdit }: FormProps) {
         <label htmlFor="task">{textAction} a task</label>
         <input
           type="text"
-          value={task}
-          onChange={event => setTask(event.target.value)}
+          value={newTaskName}
+          onChange={event => setNewTaskName(event.target.value)}
           name="task"
           id="task"
           required

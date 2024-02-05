@@ -8,7 +8,7 @@ import { editState } from "@state/atom";
 import useToggleCompleteTask from "@state/hooks/useToggleCompleteTask";
 import Watch from "@components/Timer/Watch";
 import { formatStringToSeconds } from "@common/utils/timeFormatter";
-import TaskForm from "../TaskForm";
+import TasksForm from "../TasksForm";
 
 interface ItemProps {
   task: ITask;
@@ -45,7 +45,7 @@ export default function TasksItem({ task }: ItemProps) {
         </div>
       )}
       {edit && edit === task.id && (
-        <TaskForm textAction="Edit" taskEdit={task}/>
+        <TasksForm textAction="Edit" task={task}/>
       )}
     </li>
   );

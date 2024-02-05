@@ -1,30 +1,21 @@
 import { IList } from "@interfaces/IList";
-import styles from "./ListItem.module.css";
+import styles from "./ListsItem.module.css";
 import useHandleSelectedList from "@state/hooks/useHandleSelectedList";
 import Button from "@components/Button";
 import useDeleteList from "@state/hooks/useDeleteList";
-import { useState } from "react";
 import { useRecoilState } from "recoil";
 import { editState } from "@state/atom";
-import useEditList from "@state/hooks/useEditList";
+import ListsForm from "../ListsForm";
 
-interface ListItemProps {
+interface ListsItemProps {
   list: IList;
 }
 
-export default function ListItem({ list }: ListItemProps) {
+export default function ListsItem({ list }: ListsItemProps) {
   const handleSelectedList = useHandleSelectedList();
   const deleteList = useDeleteList();
-  const editList = useEditList();
 
   const [edit, setEdit] = useRecoilState<string | null>(editState);
-
-  const [listName, setListName] = useState(list.name);
-
-  function handleEditList() {
-    editList(list.id, listName);
-    setEdit(null);
-  }
 
   return (
     <li className={styles.listItem}>
@@ -45,14 +36,7 @@ export default function ListItem({ list }: ListItemProps) {
         </div>
       )}
       {edit && edit === list.id && (
-        <div className={styles.listItem__edit}>
-          <input
-            type="text"
-            value={listName}
-            onChange={(event) => setListName(event.target.value)}
-          />
-          <Button onClick={handleEditList}>Ok</Button>
-        </div>
+        <ListsForm textAction="Edit" list={list} />
       )}
     </li>
   );
