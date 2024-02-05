@@ -3,7 +3,7 @@ import styles from "./FlowModal.module.css";
 import Button from "@components/Button";
 import useFlow from "@state/hooks/useFlow";
 import { formatStringToSeconds } from "@common/utils/timeFormatter";
-import Watch from "@components/Timer/Watch";
+import Watch from "@components/Watch";
 import useEditFlow from "@state/hooks/useEditFlow";
 
 export default function FlowModal() {

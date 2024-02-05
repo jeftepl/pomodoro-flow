@@ -6,7 +6,7 @@ import useDeleteTask from "@state/hooks/useDeleteTask";
 import { useRecoilState } from "recoil";
 import { editState } from "@state/atom";
 import useToggleCompleteTask from "@state/hooks/useToggleCompleteTask";
-import Watch from "@components/Timer/Watch";
+import Watch from "@components/Watch";
 import { formatStringToSeconds } from "@common/utils/timeFormatter";
 import TasksForm from "../TasksForm";
 
