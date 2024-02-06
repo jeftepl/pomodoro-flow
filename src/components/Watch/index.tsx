@@ -1,27 +1,26 @@
+import { memo, useCallback } from "react";
 import styles from "./Watch.module.css";
 import { formatSecondsToString } from "@common/utils/timeFormatter";
+
 interface IWatchProps {
   timeInSeconds: number
 }
 
-export default function Watch({ timeInSeconds }: IWatchProps) {
+const Watch = memo(({ timeInSeconds }: IWatchProps) => {
   const time = formatSecondsToString(timeInSeconds);
   const hoursAreZero = timeInSeconds < 3600;
 
+  const formatTimePart = useCallback((index: number) => {
+    return !hoursAreZero || index >=  3 ? time[index] : null;
+  }, [time, hoursAreZero]);
+
   return (
     <div className={styles.watch}>
-      {!hoursAreZero && (
-        <>
-          <span>{time[0]}</span>
-          <span>{time[1]}</span>
-          <span>{time[2]}</span>
-        </>
-      )}
-      <span>{time[3]}</span>
-      <span>{time[4]}</span>
-      <span>{time[5]}</span>
-      <span>{time[6]}</span>
-      <span>{time[7]}</span>
+      {Array.from({ length:  8 }).map((_, i) => (
+        <span key={i}>{formatTimePart(i)}</span>
+      ))}
     </div>
   );
-}
+});
+
+export default Watch;
