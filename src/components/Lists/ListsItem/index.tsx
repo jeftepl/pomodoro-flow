@@ -26,6 +26,8 @@ export default function ListsItem({ list }: ListsItemProps) {
               list.selected ? styles["listItem__text--selected"] : ""
             }`}
             onClick={() => handleSelectedList(list.id)}
+            aria-label={`Select list: ${list.name}`}
+            tabIndex={0}
           >
             {list.name}
           </p>

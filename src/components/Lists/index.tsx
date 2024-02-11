@@ -2,9 +2,10 @@ import styles from "./Lists.module.css";
 import useLists from "@state/hooks/useLists";
 import ListsItem from "./ListsItem";
 import ListsForm from "./ListsForm";
+import { IList } from "@interfaces/IList";
 
 export default function Lists() {
-  const lists = useLists();
+  const lists:IList[] = useLists();
 
   return (
     <div className={styles.lists}>

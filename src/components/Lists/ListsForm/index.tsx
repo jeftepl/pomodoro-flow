@@ -13,12 +13,7 @@ interface ListsFormProps {
 }
 
 export default function ListsForm({ textAction, list }: ListsFormProps) {
-  let initialListName = "";
-
-  if(list) {
-    initialListName = list.name;
-  }
-
+  const initialListName = list?.name || "";
   const [newListName, setNewListName] = useState(initialListName);
 
   const addList = useAddList();
@@ -28,14 +23,18 @@ export default function ListsForm({ textAction, list }: ListsFormProps) {
   function onSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if(list) {
-      editList(list.id, newListName);
-      setEdit(null);
-    } else {
-      addList(newListName);
-    }
+    try {
+      if(list) {
+        editList(list.id, newListName);
+        setEdit(null);
+      } else {
+        addList(newListName);
+      }
 
-    setNewListName("");
+      setNewListName("");
+    } catch (error) {
+      console.error("Failed to create or update list: ", error);
+    }
   }
 
   return (
