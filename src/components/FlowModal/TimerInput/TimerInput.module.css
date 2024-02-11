@@ -1,0 +1,10 @@
+.timerInput {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.timerInput__label::first-letter {
+  text-transform: uppercase;
+}
