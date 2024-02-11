@@ -6,7 +6,7 @@ interface IWatchProps {
   timeInSeconds: number
 }
 
-const Watch = memo(({ timeInSeconds }: IWatchProps) => {
+export function Watch({ timeInSeconds }: IWatchProps) {
   const time = formatSecondsToString(timeInSeconds);
   const hoursAreZero = timeInSeconds < 3600;
 
@@ -21,6 +21,8 @@ const Watch = memo(({ timeInSeconds }: IWatchProps) => {
       ))}
     </div>
   );
-});
+}
 
-export default Watch;
+const MemoizedWatch = memo(Watch);
+
+export default MemoizedWatch;
