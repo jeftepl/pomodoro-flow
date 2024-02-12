@@ -1,17 +1,17 @@
 import Watch from "@components/Watch";
-import styles from "./TimerInput.module.css";
+import styles from "./TimerRangeInput.module.css";
 
-interface TimerInputProps {
+interface TimerRangeInputProps {
   label: string,
   identifier: string,
   value: string,
   onChange: React.Dispatch<React.SetStateAction<string>>
 }
 
-export default function TimerInput({label, identifier, value, onChange}: TimerInputProps) {
+export default function TimerRangeInput({label, identifier, value, onChange}: TimerRangeInputProps) {
   return (
-    <div className={styles.timerInput}>
-      <label className={styles.timerInput__label} htmlFor={identifier}>{label}</label>
+    <div className={styles.timerRangeInput}>
+      <label className={styles.timerRangeInput__label} htmlFor={identifier}>{label}</label>
       <input
         id={identifier}
         type="range"

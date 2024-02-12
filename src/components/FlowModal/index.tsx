@@ -5,7 +5,7 @@ import useFlow from "@state/hooks/useFlow";
 import { formatStringToSeconds } from "@common/utils/timeFormatter";
 import useEditFlow from "@state/hooks/useEditFlow";
 import { IFlow } from "@interfaces/IFlow";
-import TimerInput from "./TimerInput";
+import TimerRangeInput from "./TimerRangeInput";
 
 export default function FlowModal() {
   const flow: IFlow = useFlow();
@@ -26,19 +26,19 @@ export default function FlowModal() {
   return (
     <div className={styles.flowModal}>
       <div className={styles.flowModal__container}>
-        <TimerInput
+        <TimerRangeInput
           label="pomodoro"
           identifier="Pomodoro"
           value={pomodoro}
           onChange={setPomodoro}
         />
-        <TimerInput
+        <TimerRangeInput
           label="Short Break"
           identifier="shortBreak"
           value={shortBreak}
           onChange={setShortBreak}
         />
-        <TimerInput
+        <TimerRangeInput
           label="Long Break"
           identifier="longBreak"
           value={longBreak}
