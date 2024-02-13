@@ -15,38 +15,51 @@ interface ItemProps {
 }
 
 export default function TasksItem({ task }: ItemProps) {
+  const { completed, selected, id, name, time, remainingTime } = task;
+
   const handleSelectedTask = useHandleSelectedTask();
   const deleteTask = useDeleteTask();
   const toggleCompleteTask = useToggleCompleteTask();
 
   const [edit, setEdit] = useRecoilState<string | null>(editState);
 
+  const handleToggleComplete = () => toggleCompleteTask(id);
+  const handleSelectTask = () => handleSelectedTask(task);
+  const handleEditClick = () => setEdit(id);
+  const handleDeleteClick = () => deleteTask([task]);
+
   return (
     <li className={styles.taskItem}>
-      {(!edit || edit !== task.id) && (
-        <div className={styles.taskItem__read}>
-          <input type="checkbox" checked={task.completed} onChange={() => toggleCompleteTask(task.id)} />
+      {(!edit || edit !== id) && (
+        <div
+          className={styles.taskItem__read}
+          aria-label={`Select task: ${name}`}
+          tabIndex={0}
+        >
+          <input
+            type="checkbox"
+            checked={completed}
+            onChange={handleToggleComplete}
+          />
           <div
             className={`${styles.tasksItem__text} ${
-              task.selected ? styles["tasksItem__text--selected"] : ""
+              selected ? styles["tasksItem__text--selected"] : ""
             }`}
-            onClick={() => handleSelectedTask(task)}
+            onClick={handleSelectTask}
           >
-            {task.name}
+            {name}
             <span className={styles.taskItem__time}>
-              <Watch timeInSeconds={formatStringToSeconds(task.time)} /> /
-              <Watch timeInSeconds={formatStringToSeconds(task.remainingTime)} />
+              <Watch timeInSeconds={formatStringToSeconds(time)} /> /
+              <Watch timeInSeconds={formatStringToSeconds(remainingTime)} />
             </span>
           </div>
           <div className={styles.tasksItem__options}>
-            <Button onClick={() => setEdit(task.id)}>Edit</Button>
-            <Button onClick={() => deleteTask([task])}>-</Button>
+            <Button onClick={handleEditClick}>Edit</Button>
+            <Button onClick={handleDeleteClick}>-</Button>
           </div>
         </div>
       )}
-      {edit && edit === task.id && (
-        <TasksForm textAction="Edit" task={task}/>
-      )}
+      {edit && edit === id && <TasksForm textAction="Edit" task={task} />}
     </li>
   );
 }
