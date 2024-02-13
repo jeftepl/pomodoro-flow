@@ -1,0 +1,9 @@
+.form__timeInput {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form__timeInput input {
+  width: auto;
+}

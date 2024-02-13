@@ -7,25 +7,32 @@ import { editState } from "@state/atom";
 import useAddTask from "@state/hooks/useAddTask";
 import useEditTask from "@state/hooks/useEditTask";
 import { ITask } from "@interfaces/ITask";
+import TimerNumberInput from "./TimerNumberInput";
 
 interface TasksFormProps {
-  textAction: string,
-  task?: ITask
+  textAction: string;
+  task?: ITask;
 }
 
-export default function TasksForm({ textAction, task }: TasksFormProps) {
-  let initialHours = "0";
-  let initialMinutes = "0";
-  let initialSeconds = "0";
+function parseInitialTime(task: ITask | undefined) {
+  let initialHours = "";
+  let initialMinutes = "";
+  let initialSeconds = "";
   let initialTask = "";
 
-  if(task) {
+  if (task) {
     const InitialTimeString = task.time;
     initialHours = InitialTimeString[0] + InitialTimeString[1];
     initialMinutes = InitialTimeString[3] + InitialTimeString[4];
     initialSeconds = InitialTimeString[6] + InitialTimeString[7];
     initialTask = task.name;
   }
+
+  return { initialHours, initialMinutes, initialSeconds, initialTask };
+}
+
+export default function TasksForm({ textAction, task }: TasksFormProps) {
+  const { initialHours, initialMinutes, initialSeconds, initialTask } = parseInitialTime(task);
 
   const [hours, setHours] = useState(initialHours);
   const [minutes, setMinutes] = useState(initialMinutes);
@@ -37,26 +44,31 @@ export default function TasksForm({ textAction, task }: TasksFormProps) {
   const addTask = useAddTask();
   const editTask = useEditTask();
 
-  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
+  function formattedTime() {
     const formatedHours = formatTwoDigits(Number(hours));
     const formatedMinutes = formatTwoDigits(Number(minutes));
     const formatedSeconds = formatTwoDigits(Number(seconds));
 
-    const newTime = `${formatedHours}:${formatedMinutes}:${formatedSeconds}`;
+    return `${formatedHours}:${formatedMinutes}:${formatedSeconds}`;
+  }
 
-    if(task) {
-      editTask(task.id, newTaskName, newTime);
-      setEdit(null);
-    } else {
-      addTask({ name: newTaskName, time: newTime});
+  function onSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    try {
+      if (task) {
+        editTask(task.id, newTaskName, formattedTime());
+        setEdit(null);
+      } else {
+        addTask({ name: newTaskName, time: formattedTime() });
+      }
+      setNewTaskName(initialTask);
+      setHours(initialHours);
+      setMinutes(initialMinutes);
+      setSeconds(initialSeconds);
+    } catch (error) {
+      console.error("Failed to create or update task: ", error);
     }
-
-    setNewTaskName(initialTask);
-    setHours(initialHours);
-    setMinutes(initialMinutes);
-    setSeconds(initialSeconds);
   }
 
   return (
@@ -66,7 +78,7 @@ export default function TasksForm({ textAction, task }: TasksFormProps) {
         <input
           type="text"
           value={newTaskName}
-          onChange={event => setNewTaskName(event.target.value)}
+          onChange={(event) => setNewTaskName(event.target.value)}
           name="task"
           id="task"
           required
@@ -76,44 +88,29 @@ export default function TasksForm({ textAction, task }: TasksFormProps) {
       <div className={styles.form__field}>
         <p>Time</p>
         <div className={styles.form__time}>
-          <div className={styles.form__timeInput}>
-            <input
-              id="hours"
-              type="number"
-              value={hours}
-              onChange={event => setHours(event.target.value)}
-              placeholder="00 hrs"
-              max={16}
-              min={0}
-            />
-            <label htmlFor="hours">hrs</label>
-          </div>
+          <TimerNumberInput
+            identifier="hours"
+            unit="hrs"
+            max="16"
+            value={hours}
+            onChange={setHours}
+          />
           :
-          <div className={styles.form__timeInput}>
-            <input
-              id="minutes"
-              type="number"
-              value={minutes}
-              onChange={event => setMinutes(event.target.value)}
-              max={59}
-              min={0}
-              placeholder="00 min"
-            />
-            <label htmlFor="minutes">min</label>
-          </div>
+          <TimerNumberInput
+            identifier="minutes"
+            unit="min"
+            max="59"
+            value={minutes}
+            onChange={setMinutes}
+          />
           :
-          <div className={styles.form__timeInput}>
-            <input
-              id="seconds"
-              type="number"
-              max={59}
-              min={0}
-              value={seconds}
-              onChange={event => setSeconds(event.target.value)}
-              placeholder="00 sec"
-            />
-            <label htmlFor="seconds">sec</label>
-          </div>
+          <TimerNumberInput
+            identifier="seconds"
+            unit="sec"
+            max="59"
+            value={seconds}
+            onChange={setSeconds}
+          />
         </div>
         <Button type="submit">{textAction}</Button>
       </div>
