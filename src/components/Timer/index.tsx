@@ -8,14 +8,19 @@ import FlowModal from "@components/FlowModal";
 import { useRecoilState } from "recoil";
 import { editState } from "@state/atom";
 import Watch from "@components/Watch";
+import { IWatch } from "@interfaces/IWatch";
+import { ITask } from "@interfaces/ITask";
 
 export default function Timer() {
   const [edit, setEdit] = useRecoilState<string | null>(editState);
 
   const timerHandler = useTimerHandler();
   const stopWatch = useStopWatch();
-  const watch = useWatch();
-  const selectedTask = useGetSelectedTask();
+  const watch: IWatch = useWatch();
+  const selectedTask: ITask | null = useGetSelectedTask();
+
+  const isWatchRunning = watch.run && !selectedTask?.completed;
+  const textBtn = isWatchRunning ? "Stop" : "Play";
 
   return (
     <div className={styles.timer}>
@@ -23,15 +28,10 @@ export default function Timer() {
       {edit === "flowModal" ? <FlowModal /> : null}
       <Watch timeInSeconds={watch.value} />
       <Button
-        onClick={
-          watch.run && !selectedTask?.completed
-            ? stopWatch
-            : timerHandler
-        }
+        aria-label={`Select: ${textBtn}`}
+        onClick={isWatchRunning ? stopWatch : timerHandler}
       >
-        {watch.run && !selectedTask?.completed
-          ? "Stop"
-          : "Play"}
+        {textBtn}
       </Button>
     </div>
   );
