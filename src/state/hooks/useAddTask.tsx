@@ -3,10 +3,11 @@ import { tasksState } from "@state/atom";
 import { useSetRecoilState } from "recoil";
 import { v4 as uuid } from "uuid";
 import useGetSelectedList from "./useGetSelectedList";
+import { IList } from "@interfaces/IList";
 
 export default function useAddTask() {
   const setTasks = useSetRecoilState<ITask[]>(tasksState);
-  const selectedList = useGetSelectedList();
+  const selectedList: IList | null = useGetSelectedList();
 
   return (data: { name: string; time: string }) => {
     if(!selectedList) {
