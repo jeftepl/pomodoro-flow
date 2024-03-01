@@ -13,7 +13,7 @@ export default function useFlowHandler() {
   const [watch, setWatch] = useRecoilState<IWatch>(watchState);
   const setTasks = useSetRecoilState<ITask[]>(tasksState);
   const resetFlow = useResetRecoilState(flowState);
-  const selectedTask = useGetSelectedTask();
+  const selectedTask: ITask | null = useGetSelectedTask();
 
   const POMODORO = "pomodoro";
   const SHORT_BREAK = "shortBreak";
@@ -46,10 +46,8 @@ export default function useFlowHandler() {
           remainingTime: totalString
         }
       }
-      return {
-        ...task
-      }
-    }))
+      return task;
+    }));
   }
 
   function toggleActivityAndUpdateCount(state: FlowKeys, activeState: boolean, count: number) {
@@ -70,23 +68,41 @@ export default function useFlowHandler() {
     }
   }
 
-  return () => {
-    if (flow.pomodoro.active && watch.value === 0) {
-      toggleActivityAndUpdateCount(POMODORO, false, 1);
-      toggleActivityAndUpdateCount(SHORT_BREAK, true, 0);
-    } else if (flow.shortBreak.active && watch.value === 0) {
-      toggleActivityAndUpdateCount(SHORT_BREAK, false, 1);
-      if (currentNumberOfTimes === 4) {
-        resetFlow();
-        toggleActivityAndUpdateCount(LONG_BREAK, true, 0);
-      } else {
-        toggleActivityAndUpdateCount(POMODORO, true, 0);
-      }
-    } else if (flow.longBreak.active && watch.value === 0){
-      toggleActivityAndUpdateCount(LONG_BREAK, false, 1);
-      toggleActivityAndUpdateCount(POMODORO, true, 0);
+  const handlePomodoroEnd = () => {
+    toggleActivityAndUpdateCount(POMODORO, false,  1);
+    toggleActivityAndUpdateCount(SHORT_BREAK, true,  0);
+  };
+
+  const handleShortBreakEnd = () => {
+    toggleActivityAndUpdateCount(SHORT_BREAK, false,  1);
+    if (currentNumberOfTimes ===  4) {
+      resetFlow();
+      toggleActivityAndUpdateCount(LONG_BREAK, true,  0);
     } else {
-      toggleActivityAndUpdateCount(POMODORO, true, 0);
+      toggleActivityAndUpdateCount(POMODORO, true,  0);
     }
   };
+
+  const handleLongBreakEnd = () => {
+    toggleActivityAndUpdateCount(LONG_BREAK, false,  1);
+    toggleActivityAndUpdateCount(POMODORO, true,  0);
+  };
+
+  const startPomodoro = () => {
+    toggleActivityAndUpdateCount(POMODORO, true,  0);
+  };
+
+  const handleFlow = () => {
+    if (flow.pomodoro.active && watch.value ===  0) {
+      handlePomodoroEnd();
+    } else if (flow.shortBreak.active && watch.value ===  0) {
+      handleShortBreakEnd();
+    } else if (flow.longBreak.active && watch.value ===  0) {
+      handleLongBreakEnd();
+    } else {
+      startPomodoro();
+    }
+  };
+
+  return handleFlow;
 }
