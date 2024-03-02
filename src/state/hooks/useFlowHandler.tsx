@@ -63,7 +63,7 @@ export default function useFlowHandler() {
       };
     });
     updateWatch(flow[state].time);
-    if(count > 0) {
+    if(count > 0 && selectedTask) {
       updateTaskRemainingTime(flow[state].time);
     }
   }
