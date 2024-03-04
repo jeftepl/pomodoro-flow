@@ -1,18 +1,20 @@
-import { watchState } from "@state/atom";
-import useGetSelectedTask from "./useGetSelectedTask";
-import { useRecoilState } from "recoil";
-import useToggleCompleteTask from "./useToggleCompleteTask";
-import { IWatch } from "@interfaces/IWatch";
 import { useEffect, useCallback, useRef } from "react";
+import { useRecoilState } from "recoil";
+import { watchState } from "@state/atom";
+import { ITask } from "@interfaces/ITask";
+import { IWatch } from "@interfaces/IWatch";
 import { formatStringToSeconds } from "@common/utils/timeFormatter";
 import useFlowHandler from "./useFlowHandler";
+import useGetSelectedTask from "./useGetSelectedTask";
+import useToggleCompleteTask from "./useToggleCompleteTask";
 
 export default function useTimerHandler() {
   const [watch, setWatch] = useRecoilState<IWatch>(watchState);
   const isTimerRunningRef = useRef<boolean>(false);
   const timerIdRef = useRef<number | undefined>(undefined);
 
-  const selectedTask = useGetSelectedTask();
+  const selectedTask: ITask | null = useGetSelectedTask();
+
   const toggleCompleteTask = useToggleCompleteTask();
   const flowHandler = useFlowHandler();
 
@@ -30,12 +32,12 @@ export default function useTimerHandler() {
     let timeWatch = watch.value;
     timerIdRef.current = setInterval(() => {
       try {
-        if(selectedTask) {
+        if (selectedTask) {
           const timePassedInSeconds = watch.initialValue - watch.value;
           const remainingTimeInSeconds = formatStringToSeconds(selectedTask.remainingTime);
-          if ((remainingTimeInSeconds - timePassedInSeconds) === 0) {
+          if (remainingTimeInSeconds - timePassedInSeconds === 0) {
             toggleCompleteTask(selectedTask.id);
-            setWatch(oldWatch => ({...oldWatch, value: 0, run: false }));
+            setWatch(oldWatch => ({ ...oldWatch, value: 0, run: false }));
             stopTimer();
             return;
           }
@@ -56,14 +58,12 @@ export default function useTimerHandler() {
   useEffect(() => {
     if (watch.run && !isTimerRunningRef.current) {
       startTimer();
-    } else if (!watch.run && isTimerRunningRef.current) {
-      stopTimer();
     }
 
     return () => {
       stopTimer();
     };
-  }, [watch, selectedTask, startTimer, stopTimer]);
+  }, [watch.run, startTimer, stopTimer]);
 
   return () => {
     if (selectedTask?.completed) {
