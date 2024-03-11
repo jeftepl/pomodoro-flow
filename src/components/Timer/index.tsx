@@ -1,5 +1,5 @@
 import Button from "@components/Button";
-import styles from "./Timer.module.css";
+import "./Timer.scss";
 import useTimerHandler from "@state/hooks/useTimerHandler";
 import useStopWatch from "@state/hooks/useStopWatch";
 import useWatch from "@state/hooks/useWatch";
@@ -23,7 +23,7 @@ export default function Timer() {
   const textBtn = isWatchRunning ? "Stop" : "Play";
 
   return (
-    <div className={styles.timer}>
+    <div className="timer">
       <Button onClick={() => setEdit("flowModal")}>Flow</Button>
       {edit === "flowModal" ? <FlowModal /> : null}
       <Watch timeInSeconds={watch.value} />

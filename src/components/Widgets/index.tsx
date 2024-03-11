@@ -1,11 +1,11 @@
 import Tasks from "@components/Tasks";
-import styles from "./Widgets.module.css";
+import "./Widgets.scss";
 import Search from "@components/Search";
 import Lists from "@components/Lists";
 
 export default function Widgets() {
   return (
-    <div className={styles.widgets}>
+    <div className="widgets">
       <Search />
       <Lists />
       <Tasks />

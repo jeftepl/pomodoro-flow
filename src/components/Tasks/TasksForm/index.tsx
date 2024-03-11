@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./TasksForm.module.css";
+import "./TasksForm.scss";
 import Button from "@components/Button";
 import { formatTwoDigits } from "@common/utils/timeFormatter";
 import { useSetRecoilState } from "recoil";
@@ -72,8 +72,8 @@ export default function TasksForm({ textAction, task }: TasksFormProps) {
   }
 
   return (
-    <form className={styles.form} onSubmit={onSubmit}>
-      <div className={styles.form__field}>
+    <form className="form" onSubmit={onSubmit}>
+      <div className="form__field">
         <label htmlFor="task">{textAction} a task</label>
         <input
           type="text"
@@ -85,9 +85,9 @@ export default function TasksForm({ textAction, task }: TasksFormProps) {
           placeholder="Type a task"
         />
       </div>
-      <div className={styles.form__field}>
+      <div className="form__field">
         <p>Time</p>
-        <div className={styles.form__time}>
+        <div className="form__time">
           <TimerNumberInput
             identifier="hours"
             unit="hrs"

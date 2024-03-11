@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./FlowModal.module.css";
+import  "./FlowModal.scss";
 import Button from "@components/Button";
 import useFlow from "@state/hooks/useFlow";
 import { formatStringToSeconds } from "@common/utils/timeFormatter";
@@ -24,8 +24,8 @@ export default function FlowModal() {
   };
 
   return (
-    <div className={styles.flowModal}>
-      <div className={styles.flowModal__container}>
+    <div className="flowModal">
+      <div className="flowModal__container">
         <TimerRangeInput
           label="pomodoro"
           identifier="Pomodoro"

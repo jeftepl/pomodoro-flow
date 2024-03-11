@@ -1,5 +1,5 @@
 import { memo, useCallback } from "react";
-import styles from "./Watch.module.css";
+import "./Watch.scss";
 import { formatSecondsToString } from "@common/utils/timeFormatter";
 
 interface IWatchProps {
@@ -15,7 +15,7 @@ export function Watch({ timeInSeconds }: IWatchProps) {
   }, [time, hoursAreZero]);
 
   return (
-    <div className={styles.watch}>
+    <div className="watch">
       {Array.from({ length:  8 }).map((_, i) => (
         <span key={i}>{formatTimePart(i)}</span>
       ))}

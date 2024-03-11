@@ -3,8 +3,8 @@
   flex-direction: column;
   align-items: center;
   gap: 10px;
-}
 
-.timerRangeInput__label::first-letter {
-  text-transform: uppercase;
+  &__label::first-letter {
+    text-transform: uppercase;
+  }
 }

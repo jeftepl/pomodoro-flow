@@ -1,5 +1,5 @@
 import { IList } from "@interfaces/IList";
-import styles from "./ListsItem.module.css";
+import "./ListsItem.scss";
 import useHandleSelectedList from "@state/hooks/useHandleSelectedList";
 import Button from "@components/Button";
 import useDeleteList from "@state/hooks/useDeleteList";
@@ -18,20 +18,18 @@ export default function ListsItem({ list }: ListsItemProps) {
   const [edit, setEdit] = useRecoilState<string | null>(editState);
 
   return (
-    <li className={styles.listItem}>
+    <li className="listItem">
       {(!edit || edit !== list.id) && (
-        <div className={styles.listItem__read}>
+        <div className="listItem__read">
           <p
-            className={`${styles.listItem__text} ${
-              list.selected ? styles["listItem__text--selected"] : ""
-            }`}
+            className={`listItem__text ${list.selected ? "listItem__text--selected" : ""}`}
             onClick={() => handleSelectedList(list.id)}
             aria-label={`Select list: ${list.name}`}
             tabIndex={0}
           >
             {list.name}
           </p>
-          <div className={styles.listItem__options}>
+          <div className="listItem__options">
             <Button onClick={() => setEdit(list.id)}>Edit</Button>
             <Button onClick={() => deleteList(list.id)}>-</Button>
           </div>

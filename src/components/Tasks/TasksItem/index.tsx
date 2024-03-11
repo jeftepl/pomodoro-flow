@@ -1,5 +1,5 @@
 import { ITask } from "@interfaces/ITask";
-import styles from "./TasksItem.module.css";
+import "./TasksItem.scss";
 import useHandleSelectedTask from "@state/hooks/useHandleSelectedTask";
 import Button from "@components/Button";
 import useDeleteTask from "@state/hooks/useDeleteTask";
@@ -29,10 +29,10 @@ export default function TasksItem({ task }: ItemProps) {
   const handleDeleteClick = () => deleteTask([task]);
 
   return (
-    <li className={styles.taskItem}>
+    <li className="tasksItem">
       {(!edit || edit !== id) && (
         <div
-          className={styles.taskItem__read}
+          className="tasksItem__read"
           aria-label={`Select task: ${name}`}
           tabIndex={0}
         >
@@ -42,18 +42,16 @@ export default function TasksItem({ task }: ItemProps) {
             onChange={handleToggleComplete}
           />
           <div
-            className={`${styles.tasksItem__text} ${
-              selected ? styles["tasksItem__text--selected"] : ""
-            }`}
+            className={`tasksItem__text ${selected ? "tasksItem__text--selected" : ""}`}
             onClick={handleSelectTask}
           >
             {name}
-            <span className={styles.taskItem__time}>
+            <span className="tasksItem__time">
               <Watch timeInSeconds={formatStringToSeconds(time)} /> /
               <Watch timeInSeconds={formatStringToSeconds(remainingTime)} />
             </span>
           </div>
-          <div className={styles.tasksItem__options}>
+          <div className="tasksItem__options">
             <Button onClick={handleEditClick}>Edit</Button>
             <Button onClick={handleDeleteClick}>-</Button>
           </div>

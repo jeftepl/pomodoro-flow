@@ -1,4 +1,4 @@
-import styles from "./Search.module.css";
+import "./Search.scss";
 import { useRecoilState } from "recoil";
 import { searchState } from "@state/atom";
 import Button from "@components/Button";
@@ -20,8 +20,8 @@ export default function Search() {
   };
 
   return (
-    <div className={styles.search}>
-      <form className={styles.search__form}>
+    <div className="search">
+      <form className="search__form">
         <label htmlFor="search">Search</label>
         <input
           type="text"

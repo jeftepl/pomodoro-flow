@@ -1,5 +1,5 @@
 import Watch from "@components/Watch";
-import styles from "./TimerRangeInput.module.css";
+import "./TimerRangeInput.scss";
 
 interface TimerRangeInputProps {
   label: string,
@@ -10,8 +10,8 @@ interface TimerRangeInputProps {
 
 export default function TimerRangeInput({label, identifier, value, onChange}: TimerRangeInputProps) {
   return (
-    <div className={styles.timerRangeInput}>
-      <label className={styles.timerRangeInput__label} htmlFor={identifier}>{label}</label>
+    <div className="timerRangeInput">
+      <label className="timerRangeInput__label" htmlFor={identifier}>{label}</label>
       <input
         id={identifier}
         type="range"

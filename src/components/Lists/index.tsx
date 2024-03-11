@@ -1,4 +1,4 @@
-import styles from "./Lists.module.css";
+import "./Lists.scss";
 import useLists from "@state/hooks/useLists";
 import ListsItem from "./ListsItem";
 import ListsForm from "./ListsForm";
@@ -8,8 +8,8 @@ export default function Lists() {
   const lists:IList[] = useLists();
 
   return (
-    <div className={styles.lists}>
-      <h2 className={styles.lists__title}>Lists</h2>
+    <div className="lists">
+      <h2 className="lists__title">Lists</h2>
       <ListsForm textAction="Add" />
       <ul>
         {lists.map((list) => (

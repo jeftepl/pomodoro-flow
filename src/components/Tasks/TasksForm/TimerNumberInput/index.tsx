@@ -1,4 +1,4 @@
-import styles from "./TimerNumberInput.module.css";
+import "./TimerNumberInput.scss";
 
 interface TimerNumberInputProps {
   identifier: string,
@@ -16,7 +16,7 @@ export default function TimerNumberInput({
   onChange,
 }: TimerNumberInputProps) {
   return (
-    <div className={styles.form__timeInput}>
+    <div className="timeInput">
       <input
         id={identifier}
         type="number"

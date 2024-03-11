@@ -1,4 +1,4 @@
-import "./App.css";
+import "./App.scss";
 import { RecoilRoot } from "recoil";
 import Container from "@components/Container";
 import Timer from "@components/Timer";

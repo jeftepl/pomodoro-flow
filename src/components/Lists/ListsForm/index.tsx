@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./ListsForm.module.css";
+import "./ListsForm.scss";
 import Button from "@components/Button";
 import useAddList from "@state/hooks/useAddList";
 import useEditList from "@state/hooks/useEditList";
@@ -38,7 +38,7 @@ export default function ListsForm({ textAction, list }: ListsFormProps) {
   }
 
   return (
-    <form className={styles.listsForm} onSubmit={onSubmit}>
+    <form className="listsForm" onSubmit={onSubmit}>
       <label htmlFor="list">{textAction} a list</label>
       <input
         type="text"
